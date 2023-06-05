@@ -27,8 +27,8 @@ void run_flash_fwd(Flash_fwd_params &params, cudaStream_t stream) {
     const int num_m_block = (params.seqlen_q + Kernel_traits::kBlockM - 1) / Kernel_traits::kBlockM;
     dim3 grid(num_m_block, params.b, params.h);
     // We also use is_even_N to set Unpadded in the BlockInfo constructor, so we need to check
-    // for cu_seqlens_q as well.
-    const bool is_even_N = params.cu_seqlens_q == nullptr && params.cu_seqlens_k == nullptr && params.seqlen_k % Kernel_traits::kBlockN == 0;
+    // for start_seq_q as well.
+    const bool is_even_N = params.start_seq_q == nullptr && params.start_seq_k == nullptr && params.seqlen_k % Kernel_traits::kBlockN == 0;
     const bool is_even_K = params.d == Kernel_traits::kHeadDim;
     const bool return_softmax = params.p_ptr != nullptr;
     BOOL_SWITCH(is_even_N, IsEvenNConst, [&] {
